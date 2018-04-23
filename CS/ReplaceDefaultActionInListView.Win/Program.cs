@@ -1,0 +1,36 @@
+using System;
+using System.Configuration;
+using System.Windows.Forms;
+
+using DevExpress.ExpressApp;
+using DevExpress.ExpressApp.Security;
+using DevExpress.ExpressApp.Win;
+using DevExpress.Persistent.Base;
+using DevExpress.Persistent.BaseImpl;
+
+namespace ReplaceDefaultActionInListView.Win {
+    static class Program {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main() {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            EditModelPermission.AlwaysGranted = System.Diagnostics.Debugger.IsAttached;
+            ReplaceDefaultActionInListViewWindowsFormsApplication winApplication = 
+            new ReplaceDefaultActionInListViewWindowsFormsApplication();
+            winApplication.ConnectionString = 
+                ReplaceDefaultActionInListView.Module.CodeCentralExampleInMemoryDataStoreProvider.ConnectionString;
+            try {
+                DevExpress.ExpressApp.InMemoryDataStoreProvider.Register();
+                                winApplication.ConnectionString = DevExpress.ExpressApp.InMemoryDataStoreProvider.ConnectionString;
+                winApplication.Setup();
+                winApplication.Start();
+            }
+            catch (Exception e) {
+                winApplication.HandleException(e);
+            }
+        }
+    }
+}
